@@ -1,3 +1,4 @@
+
 #! /bin/bash
 function count_lines {
 read -p "Enter a file name to read: " file
