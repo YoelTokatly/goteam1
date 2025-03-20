@@ -10,8 +10,8 @@ get_folder_info() {
 # delete all files in a folder
 delete_all_files() {
     get_folder_info "$1"
-    read -p "are you sure you want to delete all files in $1? (yes/no): " confirm
-    if [[ "$confirm" == "yes" ]]; then
+    read -p "are you sure you want to delete all files in $1? (y/n): " confirm
+    if [[ "$confirm" == "y" ]]; then
         find "$1" -type f -exec rm -f {} +
         echo "all files deleted from $1!"
     else
@@ -19,11 +19,18 @@ delete_all_files() {
     fi
 }
 
-# delete files by extension
+# delete files by extension with improved error handling
 delete_by_extension() {
-    echo "found $(find "$1" -type f -name "*.$2" | wc -l) *.$2 files"
-    read -p "are you sure you want to delete all *.$2 files? (yes/no): " confirm
-    if [[ "$confirm" == "yes" ]]; then
+    count=$(find "$1" -type f -name "*.$2" | wc -l)
+    
+    if [[ "$count" -eq 0 ]]; then
+        echo "no .$2 files found in $1"
+        return
+    fi
+
+    echo "found $count *.$2 files"
+    read -p "are you sure you want to delete all *.$2 files? (y/n): " confirm
+    if [[ "$confirm" == "y" ]]; then
         find "$1" -type f -name "*.$2" -exec rm -f {} +
         echo "all .$2 files deleted!"
     else
@@ -31,7 +38,7 @@ delete_by_extension() {
     fi
 }
 
-# menu using if conditions
+# menu
 echo "delete script options:"
 echo "1 delete all files in a folder"
 echo "2 delete files by extension"
