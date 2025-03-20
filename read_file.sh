@@ -1,29 +1,22 @@
 #! /bin/bash
-#function count_lines {
+function count_lines {
+read -p "Enter a file name to read: " file
 while read line;do 
 echo $line
-#echo "words: $(wc -w) lines: $(wc -l) total size: $(wc -c) bytes" 
-done <file 
-echo "words: $(wc -w file | cut -d' ' -f1) lines: $(wc -l file | cut -d' ' -f1) total size: $(wc -c file | cut -d' ' -f1)"
-#}
+done < $file
+echo "words: $(wc -w $file | cut -d' ' -f1) lines: $(wc -l $file | cut -d' ' -f1) total size: $(wc -c $file | cut -d' ' -f1)"
+}
 
-#function search {
-read -p "Enter a text to search in file: " text
-#cat file | grep -q $text
-#status=$?
-#if [[ status -eq 0 ]];then
-#cat file | grep $text
-#if 
-status=$(grep -o $text file)
+function search {
+read -p "Enter a word to search in $file: " word 
+grep -q -w $word $file                 # -q for quiet mode, -w for printing the whole word only. 
+status=$?
 if [[ $status -eq 0 ]];then
-word_num=$(grep -ob $text file)
-echo "true, word num line is $word_num"
-else echo "error" 
+word_location=$(grep -bow "$word" "$file" | cut -d ':' -f1)   # -b for the word location in bytes
+echo "True, word location is - $word_location" 
 fi
+}
 
-#grep $1 file
-#}
-#search hello
-#if [[ -z $1]];then
-#count_line |  
-#count_lines 
+#Calling the functions
+count_lines
+search
