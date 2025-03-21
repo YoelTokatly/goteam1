@@ -1,0 +1,12 @@
+drwxr-xr-x  5 jen  jen  4096 Mar 20 11:52 ./
+drwxr-x--- 18 jen  jen  4096 Mar 20 11:50 ../
+-rw-rw-r--  1 jen  jen    85 Mar 20 10:35 cats.txt
+-rwxrwxrwx  1 jen  jen    36 Mar 20 09:10 demo2.sh*
+-rwxrwxrwx  1 jen  jen   901 Mar 20 10:37 demo.sh*
+drwxrwxr-x  3 jen  jen  4096 Mar 20 11:02 folderMangerGit/
+drwxrwxr-x  3 jen  jen  4096 Mar 20 11:36 group_task/
+-rw-rw-r--  1 jen  jen     0 Mar 20 11:53 list.txt
+-rw-r--r--  1 root root  510 Mar 20 08:50 myService.log
+-rwxrwxrwx  1 jen  jen   437 Mar 20 00:17 myService.sh*
+drwxrwxr-x  3 jen  jen  4096 Mar 20 09:12 Stuff/
+-rw-rw-r--  1 jen  jen    41 Mar 20 11:33 Token.txt
