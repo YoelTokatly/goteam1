@@ -55,7 +55,7 @@ read -p "what do whant to do?" userrespond
         u)
             # f_utilty
             echo open file utility
-            ./utilty2.sh
+            ./utilty.sh
             exit 0
             ;;
         r)

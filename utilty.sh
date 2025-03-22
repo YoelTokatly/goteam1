@@ -1,75 +1,11 @@
-#!/bin/bash
 
 
-# while 
-# counter=0
-# echo $ counter
-# while   [[ $ counter -lt $ 1 ]]; do
-#     echo $ 2 
-#     counter=0
-# done
 
-#for
-# for((i=0;i<$ 1;i+=1)); do 
-# echo $ i
-# done
-# # for ((init;condition;after))
-# # init - difindes the varibel
-# # con - condition 
-# # after - what hapend to the variable
-
-#-eq: Equal to (for numbers)
-#-ne: Not equal to
-#-gt: Greater than
-#-lt: Less than
-#-ge: Greater than or equal to
-#-le: Less than or equal to
-
-#CLI Arguments
-# $ 0 - The name of the script itself
-# $ 1, $ 2, $ 3, etc. - The first, second, third, etc. arguments
-# $ @ - All arguments as separate strings
-# $ * - All arguments as a single string
-# $ # - The number of arguments
-
-
-# read -p "give directory" path
-# list =${ls -1s $path | sort -k5}
-# echo $list
-
-#!/bin/bash
-
-# File System Utility Script
-# Functions:
-# a. List files sorted by size (ascending/descending)
-# b. Count files by extension and total size
-# c. Show folder total size and warn if above threshold
-
-# Display help information
-show_help() {
-    echo "Usage: $0 [OPTIONS]"
-    echo "File System Utility Script"
-    echo
-    echo "Options:"
-    echo "  -h, --help             Show this help message"
-    echo "  -l, --list [asc|desc]  List files sorted by size (default: desc)"
-    echo "  -c, --count            Count files by extension and show size"
-    echo "  -s, --size [SIZE]      Show folder size and warn if above SIZE (in MB)"
-    echo "  -p, --path PATH        Specify the path to analyze (default: current dir)"
-    echo "  -a, --action [echo|compress|delete]  Action to take if size > threshold"
-    echo "                                       (default: echo)"
-    echo
-    echo "Examples:"
-    echo "  $0 --list desc               # List files by size, largest first"
-    echo "  $0 --count                   # Count files by extension"
-    echo "  $0 --size 100 --path /tmp    # Check if /tmp is larger than 100MB"
-    echo "  $0 --size 500 --action compress  # Suggest compression if > 500MB"
-}
 
 # Function to list files sorted by size
 list_files_by_size() {
-    local path="$1"
-    local order="$2"
+read -p "please enter a folder name" path
+read -p "asc ot desc" order
     
     echo "Listing files by size (${order}):"
     echo "================================="
@@ -191,9 +127,9 @@ check_folder_size() {
     fi
     
     # Check against threshold
+
     if (( $(echo "$size_mb > $threshold" | bc -l) )); then
-        echo "WARNING: Folder size exceeds threshold of ${threshold} MB!"
-        
+        echo "WARNING: Folder size exceeds threshold of ${threshold} MB!"        
         case "$action" in
             echo)
                 echo "No action taken. Use --action compress or --action delete for suggestions."
@@ -254,86 +190,81 @@ check_folder_size() {
 }
 
 # Set default values
-PATH_TO_CHECK="."
-LIST_ORDER="desc"
-SIZE_THRESHOLD=100  # MB
-ACTION="echo"
+# PATH_TO_CHECK="."
+# LIST_ORDER="desc"
+# SIZE_THRESHOLD=100  # MB
+# ACTION="echo"
 
-# Process command line arguments
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-            show_help
+
+start() {
+    echo "Welcome to the utility"
+    echo
+    echo "Options:"
+    echo "   l,  List files by size count files of folders by size"
+    echo "   c,  count files of folders by size"
+    echo "   f,  show folder total size"
+    echo "   e,  Nothing to do stop Manger consol"
+}
+
+start
+read -p "what do whant to do?" userrespond
+    case "$userrespond" in
+        l)
+            # f_utilty
+            list_files_by_size
+        
             exit 0
             ;;
-        -l|--list)
-            if [[ "$2" == "asc" || "$2" == "desc" ]]; then
-                LIST_ORDER="$2"
-                shift
-            fi
-            DO_LIST=true
-            shift
+        c)
+            # f_read
+            count_files_by_extension
+            ./read_file.sh
             ;;
-        -c|--count)
-            DO_COUNT=true
-            shift
+        f)
+            # f_delete
+            
+            check_folder_size
             ;;
-        -s|--size)
-            DO_SIZE=true
-            if [[ "$2" =~ ^[0-9]+$ ]]; then
-                SIZE_THRESHOLD="$2"
-                shift
-            fi
-            shift
-            ;;
-        -p|--path)
-            if [[ -n "$2" && "$2" != -* ]]; then
-                PATH_TO_CHECK="$2"
-                shift
-            fi
-            shift
-            ;;
-        -a|--action)
-            if [[ "$2" == "echo" || "$2" == "compress" || "$2" == "delete" ]]; then
-                ACTION="$2"
-                shift
-            fi
-            shift
+        e)
+            echo "O.k BY"
             ;;
         *)
-            echo "Unknown option: $1"
-            show_help
-            exit 1
+            echo "Unknown option: $userrespond"
+            echo "???????????????????????????"
+            start
             ;;
     esac
-done
 
-# Verify path exists
-if [[ ! -d "$PATH_TO_CHECK" ]]; then
-    echo "Error: Path '$PATH_TO_CHECK' does not exist or is not a directory!"
-    exit 1
-fi
 
-# If no options were specified, show help
-if [[ -z "$DO_LIST" && -z "$DO_COUNT" && -z "$DO_SIZE" ]]; then
-    show_help
-    exit 0
-fi
+# # Process command line arguments
 
-# Execute requested functions
-if [[ "$DO_LIST" == true ]]; then
-    list_files_by_size "$PATH_TO_CHECK" "$LIST_ORDER"
-    echo
-fi
+# # Verify path exists
+# if [[ ! -d "$PATH_TO_CHECK" ]]; then
+#     echo "Error: Path '$PATH_TO_CHECK' does not exist or is not a directory!"
+#     exit 1
+# fi
 
-if [[ "$DO_COUNT" == true ]]; then
-    count_files_by_extension "$PATH_TO_CHECK"
-    echo
-fi
+# # If no options were specified, show help
+# if [[ -z "$DO_LIST" && -z "$DO_COUNT" && -z "$DO_SIZE" ]]; then
+#     show_help
+#     exit 0
+# fi
 
-if [[ "$DO_SIZE" == true ]]; then
-    check_folder_size "$PATH_TO_CHECK" "$SIZE_THRESHOLD" "$ACTION"
-fi
+# # Execute requested functions
+# if [[ "$DO_LIST" == true ]]; then
+#     list_files_by_size "$PATH_TO_CHECK" "$LIST_ORDER"
+#     echo
+# fi
+
+# if [[ "$DO_COUNT" == true ]]; then
+#     count_files_by_extension "$PATH_TO_CHECK"
+#     echo
+# fi
+
+# if [[ "$DO_SIZE" == true ]]; then
+#     check_folder_size "$PATH_TO_CHECK" "$SIZE_THRESHOLD" "$ACTION"
+# fi
+
 
 exit 0
 

@@ -32,17 +32,18 @@
 # $ * - All arguments as a single string
 # $ # - The number of arguments
 
-echo hello i am file utilty lets start
+
 
 list_files_by_size() {
-    local path="$1"
-    local order="$2"
+    # local path="$1"
+    # local order="$2"
     
     echo "Listing files by size (${order}):"
     echo "================================="
     
     if [[ "$order" == "asc" ]]; then
         # Ascending order (smallest first)
+        
         find "$path" -type f -printf "%s\t%p\n" | sort -n | awk '{
             size = $1;
             $1 = "";
@@ -76,7 +77,11 @@ list_files_by_size() {
     fi
 }
 
-
+read -p "please enter a folder name" path
+read -p "asc ot desc" order
+echo hello i am file utilty lets start
+# list_files_by_size
+echo $path
 
 
 
